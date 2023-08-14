@@ -1,11 +1,8 @@
 
-import { defineUserConfig,defaultTheme } from 'vuepress'
+import { defaultTheme, defineUserConfig } from 'vuepress'
 import { docsearchPlugin } from '@vuepress/plugin-docsearch'
-import {
-  head,
-  navbar,
-  sidebar,
-} from './configs/index.js'
+import  theme from './theme.js'
+import {head} from './configs/head.js'
 
 
 export default defineUserConfig({
@@ -24,55 +21,55 @@ export default defineUserConfig({
     },
   },
 
-  theme: defaultTheme({
-    logo: '/images/hero.png',
-    repo: 'vuepress/vuepress-next',
-    docsDir: 'docs',
+  // theme: defaultTheme({
+  //   logo: '/images/hero.png',
+  //   repo: 'vuepress/vuepress-next',
+  //   docsDir: 'docs',
 
-    // theme-level locales config
-    locales: {
+  //   // theme-level locales config
+  //   locales: {
     
-      /**
-       * Chinese locale config
-       */
-      '/': {
-        // navbar
-        navbar: navbar,
-        selectLanguageName: '简体中文',
-        selectLanguageText: '选择语言',
-        selectLanguageAriaLabel: '选择语言',
-        // sidebar
-        sidebar: sidebar,
-        // page meta
-        editLinkText: '在 GitHub 上编辑此页',
-        lastUpdatedText: '上次更新',
-        contributorsText: '贡献者',
-        // custom containers
-        tip: '提示',
-        warning: '注意',
-        danger: '警告',
-        // 404 page
-        notFound: [
-          '这里什么都没有',
-          '我们怎么到这来了？',
-          '这是一个 404 页面',
-          '看起来我们进入了错误的链接',
-        ],
-        backToHome: '返回首页',
-        // a11y
-        openInNewWindow: '在新窗口打开',
-        toggleColorMode: '切换颜色模式',
-        toggleSidebar: '切换侧边栏',
-      },
-    },
+  //     /**
+  //      * Chinese locale config
+  //      */
+  //     '/': {
+  //       // navbar
+  //       navbar: navbar,
+  //       selectLanguageName: '简体中文',
+  //       selectLanguageText: '选择语言',
+  //       selectLanguageAriaLabel: '选择语言',
+  //       // sidebar
+  //       sidebar: sidebar,
+  //       // page meta
+  //       editLinkText: '在 GitHub 上编辑此页',
+  //       lastUpdatedText: '上次更新',
+  //       contributorsText: '贡献者',
+  //       // custom containers
+  //       tip: '提示',
+  //       warning: '注意',
+  //       danger: '警告',
+  //       // 404 page
+  //       notFound: [
+  //         '这里什么都没有',
+  //         '我们怎么到这来了？',
+  //         '这是一个 404 页面',
+  //         '看起来我们进入了错误的链接',
+  //       ],
+  //       backToHome: '返回首页',
+  //       // a11y
+  //       openInNewWindow: '在新窗口打开',
+  //       toggleColorMode: '切换颜色模式',
+  //       toggleSidebar: '切换侧边栏',
+  //     },
+  //   },
 
-    // themePlugins: {
-    //   // only enable git plugin in production mode
-    //   git: isProd,
-    //   // use shiki plugin in production mode instead
-    //   prismjs: !isProd,
-    // },
-  }),
+  //   // themePlugins: {
+  //   //   // only enable git plugin in production mode
+  //   //   git: isProd,
+  //   //   // use shiki plugin in production mode instead
+  //   //   prismjs: !isProd,
+  //   // },
+  // }),
 
   // configure markdown
 //   markdown: {
@@ -145,4 +142,5 @@ export default defineUserConfig({
     // // only enable shiki plugin in production mode
     // isProd ? shikiPlugin({ theme: 'dark-plus' }) : [],
   ],
+  theme:theme
 })

@@ -1,7 +1,7 @@
-import type { NavbarConfig } from 'vuepress'
+import { navbar } from 'vuepress-theme-hope'
 
 
-export const navbar: NavbarConfig = [
+export const hopeNavbar =navbar( [
   {
     text: '指南',
     link: '/guide/',
@@ -118,3 +118,4 @@ export const navbar: NavbarConfig = [
     ],
   },
 ]
+)

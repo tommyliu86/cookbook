@@ -1,6 +1,6 @@
-import { SidebarConfig } from 'vuepress'
+import { sidebar } from 'vuepress-theme-hope'
 
-export const sidebar: SidebarConfig = {
+export const hopeSidebar=sidebar( {
   '/guide/': [
     {
       text: '指南',
@@ -127,3 +127,4 @@ export const sidebar: SidebarConfig = {
     },
   ],
 }
+)
