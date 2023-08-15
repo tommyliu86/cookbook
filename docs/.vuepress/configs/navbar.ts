@@ -3,8 +3,11 @@ import { navbar } from 'vuepress-theme-hope'
 
 export const hopeNavbar =navbar( [
   {
-    text: '指南',
-    link: '/guide/',
+    text: '日常练习',
+    link: '/leetCode/',
+    icon: "lightbulb",
+    //  激活菜单？
+    activeMatch: "^/leetCode/$",
   },
   {
     text: '参考',
