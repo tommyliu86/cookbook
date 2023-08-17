@@ -2,12 +2,12 @@
 import { defaultTheme, defineUserConfig } from 'vuepress'
 import { docsearchPlugin } from '@vuepress/plugin-docsearch'
 import  theme from './theme.js'
-import {head} from './configs/head.js'
+import {head} from './head.js'
 
 
 export default defineUserConfig({
   // set site base to default value
-  base: '/',
+  base: '/cookbook/',
 
   // extra tags in `<head>`
   head,
