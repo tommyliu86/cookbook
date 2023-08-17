@@ -35,5 +35,10 @@ features:
     icon: study
     link: /java/base/Java-basis-oop
 
+  - title: 从零开始学
+    details: 从零开始学，打造个系列~
+    icon: study
+    link: /learn/
+
 footer: MIT Licensed | Copyright © 2023-present tommyLiu
 ---
