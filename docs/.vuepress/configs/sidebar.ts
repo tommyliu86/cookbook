@@ -1,6 +1,20 @@
 import { sidebar } from 'vuepress-theme-hope'
 
 export const hopeSidebar=sidebar( {
+  "/leetCode/":[{
+    text: '数据结构算法',
+    children: [
+      {
+        text: '每日刷题',
+        link: '/leetCode/everyday/',
+      },
+      {
+        text: '算法',
+        link: '/leetCode/learn/',
+      }
+    ],
+  }
+  ],
   '/guide/': [
     {
       text: '指南',

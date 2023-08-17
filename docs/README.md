@@ -23,7 +23,7 @@ features:
   - title: 每日刷题
     icon: number
     details: 日日练~日积月累
-    link: /leetCode/
+    link: /leetCode/everyday/
 
   - title: 以笔代记
     details: 好记性不如烂笔头，掌握了什么，不是一张嘴就说清楚了，写一写会更好~
