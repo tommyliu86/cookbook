@@ -22,3 +22,14 @@ category:
 
 基本上是因为网络问题，
 这时我们可以使用windows store 进行安装，安装子系统之后就好了
+
+# 查看和切换版本
+可以使用 `wsl -l -v || wsl --list --version` 查看wsl的子系统的版本
+
+使用 `wsl --set-version <name> 1 || wsl --set-version <name> 2 ` 切换 子系统的 版本 
+
+# 查看和切换系统
+使用 `wsl -l || wsl --list` 可以查看当前安装的子系统
+
+使用 `wsl -s <name> || wsl --setdefault <name>` 可以设置默认的子系统
+
