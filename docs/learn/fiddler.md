@@ -29,7 +29,7 @@ TIPS：如果没有安装证书，可以再次进行配置安装，或者手动�
 ![Alt text](image-5.png)
 选择受信任的根证书颁发机构，然后导入即可。
 
-### 过滤配置
+### 2.过滤配置
 在Rules选项中可以配置过滤规则：
 ![Alt text](image-9.png)
 1. 过滤图片
@@ -41,7 +41,7 @@ Automatic Breakpoints
 4. 自定义脚本
 Customize Rules
 
-### 配置拦截规则
+### 3.配置拦截规则
 通过打开和关闭Filters，可以进行拦截的启用和关闭，在Filters选项卡中可以配置拦截规则的定义
 ![Alt text](image-10.png)
 1. 勾选Use Filters 控制打开和关闭过滤
@@ -65,7 +65,7 @@ Customize Rules
 7. Response Headers
 根据响应头进行过滤和设置的规则。
 
-### 拦截并修改响应结果
+### 4.拦截并修改响应结果
 
 1. 使用Automatic Breakpoints 功能
     1. 拦截请求
