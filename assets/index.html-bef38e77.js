@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-a07db966","path":"/learn/oracle/","title":"Oracle","lang":"zh-CN","frontmatter":{"title":"Oracle","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
