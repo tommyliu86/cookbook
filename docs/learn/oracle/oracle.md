@@ -49,6 +49,15 @@ PS C:\Users\liuwenfei>
 第一次创建容器实例时，oracle数据库需要进行初始化，在logs中会有日志显示，等待初始化完成之后才可以进行使用。
 ![Alt text](image-3.png)
 
+#### docker启动失败EXITED(139)
+在`C:\Users\(用户名)\`中找到.wslconfig文件，若没有则创建，里面写入
+```
+[wsl2]
+kernelCommandLine = vsyscall=emulate
+
+```
+重启电脑即可
+
 ### 三、配置ORACLE_SID
 使用sqlplus的nolog方式登录服务器遇到ORA-12162报错，一般是因为没有配置ORACLE_SID这个环境变量导致。
 
