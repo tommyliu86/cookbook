@@ -11,8 +11,8 @@ category:
 
 本文档记录了使用docker安装oracle 19c，并进行数据库基础配置、使用dmp进行数据库克隆配置的流程。
 
-# Docker安装oracle
-## 一、获取镜像
+## 1. Docker安装oracle
+### 一、获取镜像
 使用docker搜索oracle对应版本镜像拉取，网上很多的oracle镜像没有文档说明，因此这里做了安装和配置的步骤和说明~
 
 - oracle-11g
@@ -24,7 +24,7 @@ docker pull registry.cn-hangzhou.aliyuncs.com/wifiliu/oracle:11g
 docker pull registry.cn-hangzhou.aliyuncs.com/wifiliu/oracle:19c
 ```
 
-## 二、启动镜像
+### 二、启动镜像
 启动命令：
 ```shell
 #11g
@@ -49,7 +49,7 @@ PS C:\Users\liuwenfei>
 第一次创建容器实例时，oracle数据库需要进行初始化，在logs中会有日志显示，等待初始化完成之后才可以进行使用。
 ![Alt text](image-3.png)
 
-## 三、配置ORACLE_SID
+### 三、配置ORACLE_SID
 使用sqlplus的nolog方式登录服务器遇到ORA-12162报错，一般是因为没有配置ORACLE_SID这个环境变量导致。
 
 启动oracle后，我们使用sqlplus登录服务器，
@@ -67,7 +67,7 @@ ORA-12162: TNS:net service name is incorrectly specified
 
 SQL>
 ```
-### 三、配置环境变量
+### 四、配置环境变量
 一般情况下docker容器都是使用非root账号运行，我们想要修改环境变量配置文件，需要使用root用户登录
 ```shell
 #使用root登录
@@ -100,7 +100,7 @@ SQL> show pdbs;
 SQL>
 ```
 
-### 四、修改账号密码、配置文件
+### 五、修改账号密码、配置文件
 默认启动的docker容器的管理员密码在第一次启动时的log日志中显示，一般会创建为随机密码，
 ![Alt text](image-4.png)
 我们可以通过服务端sqlplus进行修改：
@@ -116,10 +116,10 @@ User altered.
 修改后，我们可以使用客户端进行连接测试：
 ![Alt text](image-5.png)
 
-# oracle 12的数据库架构
+## 2. oracle 12的数据库架构
 在创建数据库前，我们需要先要了解一下oracle 12版本的数据库、用户、CDB与PDB之间的关系。
 
-## 概念：
+### 概念：
 
 1. Multitenant Environment：多租户环境
 
@@ -133,6 +133,7 @@ User altered.
 
 6. LOCAL USERS(本地用户)：仅建立在PDB层，建立的时候得指定CONTAINER。
 
+### 架构
 ![CDB和PDB的关系示意](image.png)
 
 在oracle 12中，引入了container，使用CDB层作为数据库抽象层，在这一层中，实际上是不能真正的存储数据的，数据存储在PDB（插拔数据库）中，oracle通过这样的设计把整个数据库服务端设计成了多租户形式，在每个机器上都可以实现多租户的数据库设计。
@@ -164,9 +165,9 @@ alter session set container=CDB$ROOT;
 
 
 
-# 创建PDB
+## 3. 创建PDB
 PDB(pluggable database)是可插拔数据库，也就是我们使用的实例，下面我们创建PDB。
-## 从seed库克隆创建
+### 从seed库克隆创建
 oracle数据库安装后一般情况下会带有一个PDB#SEED的数据库，这个数据库的状态是READ ONLY的，我们创建PDB时，一般使用seed来进行pdb的创建
 ```sql
 SQL> show pdbs;
@@ -240,7 +241,7 @@ CON_NAME
 EPTEST
 ```
 
-## 从非SEED库克隆创建
+### 从非SEED库克隆创建
 我们也可以从已经存在的非seed库进行克隆:
 
 ```sql
@@ -264,7 +265,7 @@ select * from nls_database_parameters
 
 ```
 
-## 修改配置文件
+### 修改配置文件
 创建好pdb数据库后，还需要修改对应的配置文件`tnsnames.ora`,该文件一般在$ORACLE_HOME/network/admin/ 文件夹下，直接在文件后面添加如下配置即可
 如果不进行配置文件修改，在使用账号密码登录PDB数据库时会遇到ORA-12154的报错：
 `ORA-12154: TNS:could not resolve the connect identifier specified`
@@ -294,8 +295,8 @@ PDB_NAME =
   )
 ```
 
-## 拔出和插入PDB
-### 拔出PDB
+### 拔出和插入PDB
+#### 拔出PDB
 
 ```sql
 --1.关闭PDB数据库
@@ -314,7 +315,7 @@ SQL> alter pluggable database [databaseName] unplug into '/home/oracle/pdb.xml';
  
 
 
-### 插入PDB
+#### 插入PDB
 
 插入PDB使用create pluggable database指定xml位置操作：
 
@@ -347,7 +348,7 @@ PATH_PREFIX='[PDB_file_path]' ;
 SQL> select name,cause,type,message,status from PDB_PLUG_IN_VIOLATIONs order by name;
 ```
 
-## 删除PDB
+### 删除PDB
 删除PDB之前需要将PDB先关闭,使用drop pluggable database命令:
 ```sql
 SQL> alter pluggable database [databaseName] close;
@@ -364,13 +365,13 @@ Pluggable database dropped.
 
  
 
-# 创建用户
+## 4. 创建用户
 
 我们使用sqlplus默认登录之后，链接进入的是CDB，在这个session中，我们只能创建common user，直接执行create user命令一般会遇到ORA-65096这个错误：
 `ORA-65096: invalid common user or role name`
 这是因为在CDB层我们只能创建common user ，要创建实例数据库用户需要在相对应的PDB会话中。
 
-## 创建用户
+### 创建用户
 ``` sql
 SQL> show con_name;
 
@@ -405,7 +406,7 @@ SQL>
 ```
 ![创建后C##用户会在PDB中自动创建](image-1.png)
 
-## 查询版本和切换pdb
+### 查询版本和切换pdb
 ```sql
 --查询当前版本
 SQL> select * from v$version;
@@ -419,13 +420,45 @@ SQL>SHOW CON_NAME;
 SQL>show pdbs;
 ---或者
 SQL>SELECT * FROM V$pdbs;
+```
+
+### 创建普通用户
+切换到对应的pdb数据库之后，就可以创建对应的pdb中的普通用户啦
+```sql
+
+-- 切换容器 这里需要权限
+alter session set container=ORCLPDB1;
+
+--创建用户
+create user userName identified by password default tablespace tablespaceName;
+
+```
+```sql
+--给用户授权
+grant connect,resource,dba to user_name;
+
+-- 给用户user_name 授权。
+
+--connect和resource是两个系统内置的角色，和dba是并列的关系。
 
 
+--DBA：拥有全部特权，是系统最高权限，只有DBA才可以创建数据库结构。
+--RESOURCE:拥有Resource权限的用户只可以创建实体，不可以创建数据库结构。
+--CONNECT：拥有Connect权限的用户只可以登录Oracle，不可以创建实体，不可以创建数据库结构。
+
+grant 
+create any directory,
+create session,
+create table,
+create view,
+unlimited tablespace
+to userName;
 ```
 
 
 
-# 创建表空间
+
+## 5. 创建表空间
 oracle中的表空间是数据库级别下的一个空间概念，我们创建的用户和表都需要处在一个表空间中才行，因此一般创建数据库之后，需要给这个数据库创建一个表空间，用来作为我们创建scheme(user)的空间
 - 创建表空间的sql语法：
 ``` sql
@@ -482,46 +515,12 @@ SQL> alter tablespace lims rename to lims_data;
 ```
 
 
-# 用户
-## 创建普通用户
-切换到对应的pdb数据库之后，就可以创建对应的pdb中的普通用户啦
-```sql
 
--- 切换容器 这里需要权限
-alter session set container=ORCLPDB1;
-
---创建用户
-create user userName identified by password default tablespace tablespaceName;
-
-```
-```sql
---给用户授权
-grant connect,resource,dba to user_name;
-
--- 给用户user_name 授权。
-
---connect和resource是两个系统内置的角色，和dba是并列的关系。
-
-
---DBA：拥有全部特权，是系统最高权限，只有DBA才可以创建数据库结构。
---RESOURCE:拥有Resource权限的用户只可以创建实体，不可以创建数据库结构。
---CONNECT：拥有Connect权限的用户只可以登录Oracle，不可以创建实体，不可以创建数据库结构。
-
-grant 
-create any directory,
-create session,
-create table,
-create view,
-unlimited tablespace
-to userName;
-```
-
-
-# 使用impdp/expdp
+## 6. 使用impdp/expdp
 
 impdp/expdp和sqlplus一样，是oracle服务提供的cmd命令，用来进行数据库的导入、导出。
 
-## 文件夹
+### 创建文件夹
 在导入导出中一般会使用到directory文件夹，这个是在sqlplus进入对应的数据库中，创建指定的文件夹变量;
 如果某个数据库中没有对应的directory变量，而在导入导出命令中使用，则会导致执行失败。
 ```sql
@@ -540,7 +539,7 @@ select * from dba_directories;
 
 ```
 
-## expdp导出
+### expdp导出
 我们在服务端可以使用expdp导出dmp文件（不需要进入sqlplus，impdp/expdp和sqlplus一样是cmd命令），主要的命令是：
 ```shell
 
@@ -566,7 +565,7 @@ expdp [username]/[password]  dumpfile=expdp.dmp DIRECTORY=dpdata logfile=expdlog
 
 
 
-## impdp导入
+### impdp导入
 impdp导入命令对应expdp命令，其中的参数基本一致，在使用impdp导入schema到新数据库中时，需要注意：
 1. 命令中的directory变量是目标数据库中创建好的。
 2. directory路径是当前登录用户有权限的，或者使用root用户操作
@@ -582,7 +581,7 @@ impdp test1/test1@EPTEST dumpfile=PE231230.DMP directory=DBBACK schemas=CORE,MST
 1. 修改schema到对应的schema（修改用户）：REMAP_SCHEMA=sourceSchema:targetSchema
 2. 指定表数据的处理方式为追加：TABLE_EXISTS_ACTION=append
 
-### 报错处理
+#### 报错处理
 使用的账号不是对应PDB数据库的账号时，会导致配置的文件夹读取不到
 `ORA-39087: directory name DBBACK is invalid`
 解决方式：使用对应的PDB中的有dba权限的账号
