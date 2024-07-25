@@ -1,0 +1,1 @@
+const e=JSON.parse('{"key":"v-40910294","path":"/learn/podman/","title":"Podman","lang":"zh-CN","frontmatter":{"title":"Podman","article":false,"feed":false,"sitemap":false},"headers":[],"git":{},"readingTime":{"minutes":0,"words":1},"filePathRelative":null,"excerpt":""}');export{e as data};
